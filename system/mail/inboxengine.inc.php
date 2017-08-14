@@ -2,7 +2,7 @@
 /**************************************************************************
 * This file is part of the WebIssues Server program
 * Copyright (C) 2006 Michał Męciński
-* Copyright (C) 2007-2015 WebIssues Team
+* Copyright (C) 2007-2017 WebIssues Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -228,6 +228,9 @@ class System_Mail_InboxEngine
         $result[ 'body' ] = $body;
 
         if ( $structure->ifdisposition && ( strtoupper( $structure->disposition ) == 'ATTACHMENT' || strtoupper( $structure->disposition ) == 'INLINE' ) ) {
+            $result[ 'type' ] = 'attachment';
+            $result[ 'name' ] = $this->getParameter( $structure, 'NAME' );
+        } else if ( $structure->type == 5 && $structure->ifid ) { // inline images without disposition
             $result[ 'type' ] = 'attachment';
             $result[ 'name' ] = $this->getParameter( $structure, 'NAME' );
         } else if ( $structure->type == 0 && $structure->ifsubtype && strtoupper( $structure->subtype ) == 'PLAIN' ) {

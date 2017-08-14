@@ -2,7 +2,7 @@
 /**************************************************************************
 * This file is part of the WebIssues Server program
 * Copyright (C) 2006 Michał Męciński
-* Copyright (C) 2007-2015 WebIssues Team
+* Copyright (C) 2007-2017 WebIssues Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -272,8 +272,12 @@ class Common_Issues_Issue extends System_Web_Component
 
                 case 'USER':
                     if ( $allUsers === null ) {
+                        $principal = System_Api_Principal::getCurrent();
                         $userManager = new System_Api_UserManager();
-                        $users = $userManager->getUsers();
+                        if ( $principal->isAdministrator() )
+                            $users = $userManager->getUsers();
+                        else
+                            $users = $userManager->getVisibleUsers();
                         $allUsers = array();
                         foreach ( $users as $user )
                             $allUsers[ $user[ 'user_id' ] ] = $user[ 'user_name' ];

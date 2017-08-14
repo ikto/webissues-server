@@ -1,5 +1,5 @@
 WebIssues Server
-Version 1.1.4 (2015-08-10)
+Version 1.1.5 (2017-05-17)
 
 Server and Web Client for the WebIssues team collaboration system.
 
@@ -17,7 +17,7 @@ Copyrights
 ==========
 
 Copyright (C) 2006 Michał Męciński
-Copyright (C) 2007-2015 WebIssues Team
+Copyright (C) 2007-2017 WebIssues Team
 
 The WebIssues Manual is licensed under the terms of the GNU Free
 Documentation License, Version 1.3
@@ -115,12 +115,26 @@ Translators:
 
  * Liu Jian
  * wahoosoft
+ * swish chinese
     - Chinese translation
 
  * Mustafa Ergüven
  * Ozan Hacibekiroglu
  * Orkun Genel
     - Turkish translation
+
+ * Kornél Kovács
+ * Csontos Peter
+ * Janos Meszaros
+ * András Tóth
+    - Hungarian translation
+
+ * Lasse Jaegersborg
+    - Norwegian translation
+
+ * Aleksandar Trajkovic
+ * Ivan Ikanovic
+    - Serbian translation
 
 
 Resources

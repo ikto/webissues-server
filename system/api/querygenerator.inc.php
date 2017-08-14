@@ -2,7 +2,7 @@
 /**************************************************************************
 * This file is part of the WebIssues Server program
 * Copyright (C) 2006 Michał Męciński
-* Copyright (C) 2007-2015 WebIssues Team
+* Copyright (C) 2007-2017 WebIssues Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -34,6 +34,7 @@ class System_Api_QueryGenerator extends System_Api_Base
 
     private $folderId = 0;
     private $typeId = 0;
+    private $projectId = 0;
     private $attributes = array();
 
     private $columns = array();
@@ -87,6 +88,8 @@ class System_Api_QueryGenerator extends System_Api_Base
         $this->typeId = $type[ 'type_id' ];
 
         $this->loadAttributes( $type );
+
+        $this->columns = array_merge( array_slice( $this->columns, 0, 2 ), array( System_Api_Column::Location ), array_slice( $this->columns, 2 ) );
     }
 
     private function loadAttributes( $type )
@@ -168,6 +171,14 @@ class System_Api_QueryGenerator extends System_Api_Base
         $info->setMetadata( 'value', $text );
 
         $this->filters[] = $info;
+    }
+
+    /**
+    * Only include issues from specified project.
+    */
+    public function setProject( $project )
+    {
+        $this->projectId = $project[ 'project_id' ];
     }
 
     /**
@@ -515,6 +526,11 @@ class System_Api_QueryGenerator extends System_Api_Base
                 $conditions[] = 'p.is_public = 1';
 
             $conditions[] = 'p.is_archived = 0';
+        }
+
+        if ( $this->projectId != 0 ) {
+            $conditions[] = 'p.project_id = %d';
+            $this->arguments[] = $this->projectId;
         }
 
         if ( $this->sinceStamp != null ) {

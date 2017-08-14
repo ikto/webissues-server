@@ -2,7 +2,7 @@
 /**************************************************************************
 * This file is part of the WebIssues Server program
 * Copyright (C) 2006 Michał Męciński
-* Copyright (C) 2007-2015 WebIssues Team
+* Copyright (C) 2007-2017 WebIssues Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -230,8 +230,8 @@ class Common_Views_Helper extends System_Web_Base
         if ( $definition != null ) {
             $this->loadView( $definition );
         } else {
-            $this->selectedColumns[ System_Api_Column::ModifiedBy ] = $this->columns[ System_Api_Column::ModifiedBy ];
             $this->selectedColumns[ System_Api_Column::ModifiedDate ] = $this->columns[ System_Api_Column::ModifiedDate ];
+            $this->selectedColumns[ System_Api_Column::ModifiedBy ] = $this->columns[ System_Api_Column::ModifiedBy ];
         }
         $result[ 'columns' ] = $this->getViewColumnsAsString();
         $result[ 'sort' ] = $this->getSortAsString();
@@ -287,7 +287,7 @@ class Common_Views_Helper extends System_Web_Base
         }
 
         $sortColumn = $info->getMetadata( 'sort-column' );
-        if ( isset( $this->selectedColumns[ $sortColumn ] ) ) {
+        if ( isset( $this->selectedColumns[ $sortColumn ] ) || isset( $this->fixedColumns[ $sortColumn ] ) ) {
             $this->sortColumn = $sortColumn;
             $this->sortOrder = $info->getMetadata( 'sort-desc', 0 );
         }

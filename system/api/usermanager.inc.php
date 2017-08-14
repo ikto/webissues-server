@@ -2,7 +2,7 @@
 /**************************************************************************
 * This file is part of the WebIssues Server program
 * Copyright (C) 2006 Michał Męciński
-* Copyright (C) 2007-2015 WebIssues Team
+* Copyright (C) 2007-2017 WebIssues Team
 *
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Affero General Public License as published by
@@ -278,6 +278,21 @@ class System_Api_UserManager extends System_Api_Base
         $query = 'SELECT user_id, pref_key, pref_value FROM {preferences}';
         if ( !$principal->isAdministrator() )
             $query .= ' WHERE user_id = %d';
+
+        return $this->connection->queryTable( $query, $principal->getUserId() );
+    }
+
+    public function getVisibleUsers()
+    {
+        $principal = System_Api_Principal::getCurrent();
+
+        $query = 'SELECT u.user_id, u.user_login, u.user_name, u.user_access'
+            . ' FROM {users} AS u'
+            . ' WHERE u.user_id IN ('
+            . ' SELECT r1.user_id FROM {rights} AS r1'
+            . ' INNER JOIN {effective_rights} AS r2 ON r2.project_id = r1.project_id'
+            . ' WHERE r2.user_id = %d )'
+            . ' ORDER BY u.user_name COLLATE LOCALE';
 
         return $this->connection->queryTable( $query, $principal->getUserId() );
     }
