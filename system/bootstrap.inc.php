@@ -177,11 +177,19 @@ class System_Bootstrap
             return '';
 
         $schema = ( isset( $_SERVER[ 'HTTPS' ] ) && $_SERVER[ 'HTTPS' ] == 'on' ) ? 'https' : 'http';
+        // Take the schema from X-Forwarded-Proto
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+            $schema = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+        }
         $host = $_SERVER[ 'SERVER_NAME' ];
         $url = $schema . '://' . $host;
 
         if ( isset( $_SERVER[ 'SERVER_PORT' ] ) && !strpos( $host, ':' ) ) {
             $port = $_SERVER[ 'SERVER_PORT' ];
+            // Force the port to 443 if request was forwarded from https
+            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && ($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
+                $port = 443;
+            }
             if ( ( $schema == 'http' && $port != 80 ) || ( $schema == 'https' && $port != 443 ) )
                 $url .= ':' . $port;
         }
